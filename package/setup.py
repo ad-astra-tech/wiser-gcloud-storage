@@ -5,14 +5,14 @@ CURRENT_DIR = Path(__file__).parent
 
 # Package metadata
 name = "wiser-gcloud-storage"
-version = "0.0.2"
+version = "0.0.3"
 author = "Nicola Massarenti"
 author_email = "nicola.massarenti@gmail.com"
 description = "Google Cloud Storage APIs for wiser"
 
 # Requirements, dependencies and namespaces
 extra_requirements = dict()
-dependencies = ["wiser"]
+dependencies = ["wiser", "google-cloud-storage"]
 # Only include packages under the 'wiser' namespace. Do not include tests,
 # benchmarks, etc.
 packages = [
