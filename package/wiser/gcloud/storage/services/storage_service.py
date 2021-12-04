@@ -13,9 +13,6 @@ from wiser.core.types.extensions import FileExtension
 
 
 class Storage:
-    def __str__(self):
-        return "Google Cloud Storage Handler"
-
     @staticmethod
     def get(location: StorageLocation = None):
         if location.blob_name is None:
