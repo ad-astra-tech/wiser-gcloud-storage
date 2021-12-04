@@ -52,6 +52,7 @@ class StorageLocationTest(unittest.TestCase):
 
         storage_location = (
             StorageLocationBuilder()
+            .set_prefix(prefix="gs://")
             .set_bucket(bucket=bucket)
             .set_blob_name(blob_name="folder_a/filename.json")
             .build()
