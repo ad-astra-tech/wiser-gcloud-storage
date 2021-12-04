@@ -12,23 +12,23 @@ class StorageServiceTest(unittest.TestCase):
         WHEN    if invoked `get()` method
         THEN    value error is raised
         """
-        from wiser.gcloud.services.storage import Storage
-        from wiser.gcloud.types.storage.location import StorageLocationBuilder
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
 
         location = StorageLocationBuilder().set_bucket(bucket=BUCKET).build()
 
         with self.assertRaises(ValueError):
             Storage.get(location=location)
 
-    @patch("wiser.gcloud.connectors.storage.StorageConnector.download_as_string")
+    @patch("wiser.gcloud.storage.connectors.StorageConnector.download_as_string")
     def test_get_string(self, storage_connector_mock):
         """
         GIVEN   a valid location
         WHEN    the blob refers to a string
         THEN    the expected string is returned
         """
-        from wiser.gcloud.services.storage import Storage
-        from wiser.gcloud.types.storage.location import StorageLocationBuilder
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
 
         location = (
             StorageLocationBuilder()
@@ -42,7 +42,7 @@ class StorageServiceTest(unittest.TestCase):
 
         self.assertEqual(Storage.get(location=location), data)
 
-    @patch("wiser.gcloud.connectors.storage.StorageConnector.download_as_string")
+    @patch("wiser.gcloud.storage.connectors.StorageConnector.download_as_string")
     def test_get_json(self, storage_connector_mock):
         """
         GIVEN   a valid location
@@ -50,8 +50,8 @@ class StorageServiceTest(unittest.TestCase):
         THEN    the expected json is returned
         """
         import json
-        from wiser.gcloud.services.storage import Storage
-        from wiser.gcloud.types.storage.location import StorageLocationBuilder
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
 
         location = (
             StorageLocationBuilder()
