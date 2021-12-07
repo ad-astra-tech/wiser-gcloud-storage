@@ -96,3 +96,49 @@ class StorageServiceTest(unittest.TestCase):
         storage_mock.side_effect = write_to_file
 
         self.assertEqual(data.tolist(), Storage.get(location=location).tolist())
+
+    @patch(
+        "wiser.gcloud.storage.connectors.storage_connector.StorageConnector.download_as_bytes"
+    )
+    def test_get_jpg_png(self, storage_mock):
+        """
+        GIVEN   a valid location pointing to a jpg/png image
+        WHEN    Storage.get() is invoked
+        THEN    the expected data is returned
+        """
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
+        import PIL.Image as Image
+        import io
+
+        location = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/data.jpg")
+            .build()
+        )
+
+        jpg_path = "./tests/stubs/data.jpg"
+        img = Image.open(jpg_path)
+        bytes_array = io.BytesIO()
+        img.save(bytes_array, "jpeg")
+
+        storage_mock.return_value = bytes_array
+
+        self.assertEqual(bytes_array, Storage.get(location=location))
+
+        location = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/data.png")
+            .build()
+        )
+
+        jpg_path = "./tests/stubs/data.png"
+        img = Image.open(jpg_path)
+        bytes_array = io.BytesIO()
+        img.save(bytes_array, "png")
+
+        storage_mock.return_value = bytes_array
+
+        self.assertEqual(bytes_array, Storage.get(location=location))
