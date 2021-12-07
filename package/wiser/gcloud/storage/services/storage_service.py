@@ -53,8 +53,7 @@ class Storage:
             )
             return data
         else:
-            NotImplementedError("File extension not managed")
-            return
+            raise ValueError("File extension not managed")
 
     @staticmethod
     def save(obj, location: StorageLocation = None):

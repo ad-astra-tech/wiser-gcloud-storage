@@ -142,3 +142,50 @@ class StorageServiceTest(unittest.TestCase):
         storage_mock.return_value = bytes_array
 
         self.assertEqual(bytes_array, Storage.get(location=location))
+
+    def test_get_jpg_png(self):
+        """
+        GIVEN   a valid location pointing to an unknown extension
+        WHEN    Storage.get() is invoked
+        THEN    Value Error is raised
+        """
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
+
+        location = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/data.xxpp")
+            .build()
+        )
+
+        with self.assertRaises(ValueError):
+            Storage.get(location=location)
+
+    @patch(
+        "wiser.gcloud.storage.connectors.storage_connector.StorageConnector.download_as_bytes"
+    )
+    def test_get_pdf(self, storage_mock):
+        """
+        GIVEN   a valid location pointing to a PDF file
+        WHEN    Storage.get() is invoked
+        THEN    the content as bytes is returned
+        """
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
+
+        location = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/data.pdf")
+            .build()
+        )
+
+        pdf_path = "./tests/stubs/data.pdf"
+        in_file = open(pdf_path, "rb")
+        data = in_file.read()
+        in_file.close()
+
+        storage_mock.return_value = data
+
+        self.assertEqual(data, Storage.get(location=location))
