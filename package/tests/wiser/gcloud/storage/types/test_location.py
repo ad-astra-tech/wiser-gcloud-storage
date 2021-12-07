@@ -9,7 +9,7 @@ class StorageLocationTest(unittest.TestCase):
         THEN a value error is raised
         """
 
-        from wiser.gcloud.types.storage.location import StorageLocationBuilder
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
 
         with self.assertRaises(ValueError):
             StorageLocationBuilder().set_blob_name(
@@ -23,7 +23,7 @@ class StorageLocationTest(unittest.TestCase):
         THEN    a valid location is returned
         """
 
-        from wiser.gcloud.types.storage.location import StorageLocationBuilder
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
 
         location = StorageLocationBuilder().set_bucket(bucket="bucket").build()
 
@@ -41,7 +41,7 @@ class StorageLocationTest(unittest.TestCase):
         THEN a fully featured storage location object is returned
         """
 
-        from wiser.gcloud.types.storage.location import StorageLocationBuilder
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
 
         prefix = "gs://"
         bucket = "bucket_name"
@@ -52,6 +52,7 @@ class StorageLocationTest(unittest.TestCase):
 
         storage_location = (
             StorageLocationBuilder()
+            .set_prefix(prefix="gs://")
             .set_bucket(bucket=bucket)
             .set_blob_name(blob_name="folder_a/filename.json")
             .build()

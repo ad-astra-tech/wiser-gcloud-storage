@@ -5,7 +5,7 @@ from tempfile import TemporaryFile, NamedTemporaryFile
 import numpy as np
 
 from wiser.gcloud.storage.connectors.storage_connector import StorageConnector
-from wiser.gcloud.storage.types.storage_location import (
+from wiser.gcloud.storage.types.location import (
     StorageLocation,
     StorageLocationBuilder,
 )
@@ -13,9 +13,6 @@ from wiser.core.types.extensions import FileExtension
 
 
 class Storage:
-    def __str__(self):
-        return "Google Cloud Storage Handler"
-
     @staticmethod
     def get(location: StorageLocation = None):
         if location.blob_name is None:
@@ -56,8 +53,7 @@ class Storage:
             )
             return data
         else:
-            NotImplementedError("File extension not managed")
-            return
+            raise ValueError("File extension not managed")
 
     @staticmethod
     def save(obj, location: StorageLocation = None):

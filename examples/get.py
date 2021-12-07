@@ -1,8 +1,9 @@
 import os
 import io
 from PIL import Image
-from wiser.gcloud.services.storage import Storage
-from wiser.gcloud.types.storage.location import StorageLocationBuilder
+import PyPDF2
+from wiser.gcloud.storage.services import Storage
+from wiser.gcloud.storage.types.location import StorageLocationBuilder
 
 BUCKET_NAME = os.getenv("BUCKET_NAME")
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="path/to/service-account.json"
@@ -46,3 +47,14 @@ location = (
 )
 
 image = Image.open(io.BytesIO(Storage.get(location=location)))
+
+# PDF
+pdf_path = "/path/to/file.pdf"
+location = (
+    StorageLocationBuilder()
+    .set_bucket(bucket=BUCKET_NAME)
+    .set_blob_name(blob_name="folder_a/data.pdf")
+    .build()
+)
+Storage.save(obj=pdf_path, location=location)
+pdf = PyPDF2.PdfFileReader(io.BytesIO(Storage.get(location=location)))

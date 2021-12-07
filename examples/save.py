@@ -51,3 +51,13 @@ location = (
 )
 
 Storage.save(obj=image, location=location)
+
+# PDF
+pdf_path = "/path/to/file.pdf"
+location = (
+    StorageLocationBuilder()
+    .set_bucket(bucket=BUCKET_NAME)
+    .set_blob_name(blob_name="folder_a/data.pdf")
+    .build()
+)
+Storage.save(obj=pdf_path, location=location)
