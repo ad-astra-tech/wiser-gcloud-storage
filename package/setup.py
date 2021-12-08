@@ -12,7 +12,7 @@ description = "Google Cloud Storage APIs for wiser"
 
 # Requirements, dependencies and namespaces
 extra_requirements = dict()
-dependencies = ["google-cloud-storage"]
+dependencies = ["google-cloud-storage", "pydantic"]
 # Only include packages under the 'wiser' namespace. Do not include tests,
 # benchmarks, etc.
 packages = [
