@@ -6,11 +6,34 @@ from pydantic import BaseModel, Field
 
 
 class StorageLocation(BaseModel):
-    prefix: str = Field(default="gs://", description="Google Cloud Storage prefix", example="gs://", const=True)
-    bucket: str = Field(..., description="Google Cloud Storage bucket", example="my-bucket", min_length=1, read_only=True)
-    blob_name: Optional[str] = Field(description="Google Cloud Storage blob path", example="path/to/something.ext", read_only=True)
-    folders: Optional[str] = Field(description="Google Cloud Storage folder path", example="path/to/", read_only=True)
-    filename: Optional[str] = Field(description="Google Cloud Storage blob extension", example="something.ext", read_only=True)
+    prefix: str = Field(
+        default="gs://",
+        description="Google Cloud Storage prefix",
+        example="gs://",
+        const=True,
+    )
+    bucket: str = Field(
+        ...,
+        description="Google Cloud Storage bucket",
+        example="my-bucket",
+        min_length=1,
+        read_only=True,
+    )
+    blob_name: Optional[str] = Field(
+        description="Google Cloud Storage blob path",
+        example="path/to/something.ext",
+        read_only=True,
+    )
+    folders: Optional[str] = Field(
+        description="Google Cloud Storage folder path",
+        example="path/to/",
+        read_only=True,
+    )
+    filename: Optional[str] = Field(
+        description="Google Cloud Storage blob extension",
+        example="something.ext",
+        read_only=True,
+    )
 
     def complete_path(self):
         tail = ""
@@ -20,11 +43,28 @@ class StorageLocation(BaseModel):
 
 
 class StorageLocationBuilder(BaseModel):
-    prefix: str = Field(default="gs://", description="Google Cloud Storage prefix", example="gs://")
-    bucket: str = Field(default=None, description="Google Cloud Storage bucket", example="my-bucket", min_length=1)
-    blob_name: str = Field(default=None, description="Google Cloud Storage blob path", example="path/to/something.ext")
-    folders: str = Field(default=None, description="Google Cloud Storage folder path", example="path/to/")
-    filename: str = Field(default=None, description="Google Cloud Storage blob extension", example="something.ext")
+    prefix: str = Field(
+        default="gs://", description="Google Cloud Storage prefix", example="gs://"
+    )
+    bucket: str = Field(
+        default=None,
+        description="Google Cloud Storage bucket",
+        example="my-bucket",
+        min_length=1,
+    )
+    blob_name: str = Field(
+        default=None,
+        description="Google Cloud Storage blob path",
+        example="path/to/something.ext",
+    )
+    folders: str = Field(
+        default=None, description="Google Cloud Storage folder path", example="path/to/"
+    )
+    filename: str = Field(
+        default=None,
+        description="Google Cloud Storage blob extension",
+        example="something.ext",
+    )
 
     def set_prefix(self, prefix: str) -> StorageLocationBuilder:
         self.prefix = prefix
