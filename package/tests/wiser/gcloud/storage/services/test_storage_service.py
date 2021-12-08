@@ -357,3 +357,73 @@ class StorageServiceTest(unittest.TestCase):
         data = "zaaaaa"
         with self.assertRaises(ValueError):
             Storage.save(obj=data, location=location)
+
+    @patch("wiser.gcloud.storage.connectors.storage_connector.StorageConnector.exists")
+    def test_exists_returns_true_if_exists(self, storage_mock):
+        """
+        GIVEN   a valid location pointing to an existing file
+        WHEN    Storage.exists() is invoked
+        THEN    True is returned
+        """
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
+
+        location = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/data.json")
+            .build()
+        )
+        storage_mock.return_value = True
+        self.assertEqual(Storage.exists(location=location), True)
+
+    @patch("wiser.gcloud.storage.connectors.storage_connector.StorageConnector.exists")
+    def test_exists_returns_true_if_exists(self, storage_mock):
+        """
+        GIVEN   a valid location pointing to a not existing file
+        WHEN    Storage.exists() is invoked
+        THEN    True is returned
+        """
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
+
+        location = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/data.json")
+            .build()
+        )
+        storage_mock.return_value = False
+        self.assertEqual(Storage.exists(location=location), False)
+
+    @patch("wiser.gcloud.storage.connectors.storage_connector.StorageConnector.copy")
+    @patch("wiser.gcloud.storage.connectors.storage_connector.StorageConnector.delete")
+    def test_move_returns_none(self, delete_mock, copy_mock):
+        """
+        GIVEN   two valid locations
+        WHEN    Storage.move() is invoked
+        THEN    None is returned
+        """
+
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
+
+        location_1 = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/a/file.json")
+            .build()
+        )
+        location_2 = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/b/file.json")
+            .build()
+        )
+
+        delete_mock.return_value = None
+        copy_mock.return_value = None
+
+        self.assertEqual(
+            Storage.move(source_location=location_1, dest_location=location_2), None
+        )
