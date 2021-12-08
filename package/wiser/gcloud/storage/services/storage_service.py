@@ -104,8 +104,7 @@ class Storage:
                     destination_blob_name=location.blob_name,
                 )
         else:
-            NotImplementedError("File extension not managed")
-            return
+            raise ValueError("File extension not managed")
 
     @staticmethod
     def exists(location: StorageLocation = None):
