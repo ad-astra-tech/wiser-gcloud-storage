@@ -1,6 +1,7 @@
 import json
 
 from tempfile import TemporaryFile, NamedTemporaryFile
+from typing import Any
 
 import numpy as np
 
@@ -14,7 +15,7 @@ from wiser.core.types.extensions import FileExtension
 
 class Storage:
     @staticmethod
-    def get(location: StorageLocation = None):
+    def get(location: StorageLocation = None) -> Any:
         if location.blob_name is None:
             raise ValueError("No blob name given")
 
@@ -56,7 +57,7 @@ class Storage:
             raise ValueError("File extension not managed")
 
     @staticmethod
-    def save(obj, location: StorageLocation = None):
+    def save(obj, location: StorageLocation = None) -> None:
         if location.filename.endswith(FileExtension.NUMPY):
             tmp_file = TemporaryFile()
             np.save(tmp_file, obj)
@@ -104,17 +105,16 @@ class Storage:
                     destination_blob_name=location.blob_name,
                 )
         else:
-            NotImplementedError("File extension not managed")
-            return
+            raise ValueError("File extension not managed")
 
     @staticmethod
-    def exists(location: StorageLocation = None):
+    def exists(location: StorageLocation) -> bool:
         return StorageConnector.exists(
             bucket_name=location.bucket, source_blob_name=location.blob_name
         )
 
     @staticmethod
-    def get_list_content(location: StorageLocation = None) -> [StorageLocation]:
+    def get_list_content(location: StorageLocation) -> [StorageLocation]:
         blobs = StorageConnector.list_blobs(
             bucket_name=location.bucket, prefix=location.folders
         )
@@ -136,16 +136,16 @@ class Storage:
 
     @staticmethod
     def move(
-        source_location: StorageLocation = None,
-        dest_location: StorageLocation = None,
-    ):
+        source_location: StorageLocation,
+        dest_location: StorageLocation,
+    ) -> None:
         StorageConnector.copy(
             source_bucket_name=source_location.bucket,
             source_blob_name=source_location.blob_name,
             dest_bucket_name=dest_location.bucket,
             dest_blob_name=dest_location.blob_name,
         )
-        return StorageConnector.delete(
+        StorageConnector.delete(
             bucket_name=source_location.bucket,
             blob_name=source_location.blob_name,
         )

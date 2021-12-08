@@ -5,7 +5,7 @@ CURRENT_DIR = Path(__file__).parent
 
 # Package metadata
 name = "wiser-gcloud-storage"
-version = "0.0.5"
+version = "0.0.6"
 author = "Nicola Massarenti"
 author_email = "nicola.massarenti@gmail.com"
 description = "Google Cloud Storage APIs for wiser"
