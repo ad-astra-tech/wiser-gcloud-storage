@@ -107,13 +107,13 @@ class Storage:
             raise ValueError("File extension not managed")
 
     @staticmethod
-    def exists(location: StorageLocation = None):
+    def exists(location: StorageLocation):
         return StorageConnector.exists(
             bucket_name=location.bucket, source_blob_name=location.blob_name
         )
 
     @staticmethod
-    def get_list_content(location: StorageLocation = None) -> [StorageLocation]:
+    def get_list_content(location: StorageLocation) -> [StorageLocation]:
         blobs = StorageConnector.list_blobs(
             bucket_name=location.bucket, prefix=location.folders
         )
@@ -135,8 +135,8 @@ class Storage:
 
     @staticmethod
     def move(
-        source_location: StorageLocation = None,
-        dest_location: StorageLocation = None,
+        source_location: StorageLocation,
+        dest_location: StorageLocation,
     ):
         StorageConnector.copy(
             source_bucket_name=source_location.bucket,
