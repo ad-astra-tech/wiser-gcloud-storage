@@ -4,8 +4,8 @@ import numpy as np
 
 from PIL import Image
 
-from wiser.gcloud.services.storage import Storage
-from wiser.gcloud.types.storage.location import StorageLocationBuilder
+from wiser.gcloud.storage.services import Storage
+from wiser.gcloud.storage.types.location import StorageLocationBuilder
 
 BUCKET_NAME = os.getenv("BUCKET_NAME")
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="path/to/service-account.json"
@@ -61,3 +61,4 @@ location = (
     .build()
 )
 Storage.save(obj=pdf_path, location=location)
+
