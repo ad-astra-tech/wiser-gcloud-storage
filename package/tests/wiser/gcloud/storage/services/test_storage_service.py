@@ -378,11 +378,11 @@ class StorageServiceTest(unittest.TestCase):
         self.assertEqual(Storage.exists(location=location), True)
 
     @patch("wiser.gcloud.storage.connectors.storage_connector.StorageConnector.exists")
-    def test_exists_returns_true_if_exists(self, storage_mock):
+    def test_exists_returns_false_if_not_exist(self, storage_mock):
         """
         GIVEN   a valid location pointing to a not existing file
         WHEN    Storage.exists() is invoked
-        THEN    True is returned
+        THEN    False is returned
         """
         from wiser.gcloud.storage.services import Storage
         from wiser.gcloud.storage.types.location import StorageLocationBuilder

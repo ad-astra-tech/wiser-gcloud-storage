@@ -3,16 +3,18 @@ from pathlib import Path
 
 CURRENT_DIR = Path(__file__).parent
 
+with open(CURRENT_DIR.joinpath("version.txt")) as f:
+    version = f.readlines()[0]
+
 # Package metadata
 name = "wiser-gcloud-storage"
-version = "0.0.6"
 author = "Nicola Massarenti"
 author_email = "nicola.massarenti@gmail.com"
 description = "Google Cloud Storage APIs for wiser"
 
 # Requirements, dependencies and namespaces
 extra_requirements = dict()
-dependencies = ["google-cloud-storage"]
+dependencies = ["google-cloud-storage", "pydantic"]
 # Only include packages under the 'wiser' namespace. Do not include tests,
 # benchmarks, etc.
 packages = [
