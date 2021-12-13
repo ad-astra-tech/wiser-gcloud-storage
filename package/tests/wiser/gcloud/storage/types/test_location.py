@@ -64,3 +64,41 @@ class StorageLocationTest(unittest.TestCase):
         self.assertEqual(storage_location.filename, filename)
         self.assertEqual(storage_location.blob_name, blob_name)
         self.assertEqual(storage_location.complete_path(), complete_path)
+
+    def test_from_valid_uri_returns_valid_location(self):
+        """
+        GIVEN LocationBuilder and a valid uri
+        WHEN  the 'from_uri()' is invoked
+        THEN  a valid storage location is returned
+        """
+
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder, StorageLocation
+
+        bucket = "bucket"
+        folders = "path/to"
+        filename = "doc.pdf"
+        blob_name = "{folders}/{filename}".format(folders=folders, filename=filename)
+        uri = "gs://{bucket}/{blob_name}".format(bucket=bucket, blob_name=blob_name)
+
+        location = StorageLocationBuilder().from_uri(uri=uri).build()
+
+        self.assertIsInstance(location, StorageLocation)
+        self.assertEqual(location.bucket, bucket)
+        self.assertEqual(location.folders, folders)
+        self.assertEqual(location.filename, filename)
+        self.assertEqual(location.blob_name, blob_name)
+
+    def test_from_invalid_uri_raises_value_error(self):
+        """
+        GIVEN LocationBuilder and an invalid uri
+        WHEN  the 'from_uri()' is invoked
+        THEN  value error is raised
+        """
+
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
+
+        with self.assertRaises(ValueError):
+            StorageLocationBuilder().from_uri(uri="https://something/to/docs.csc").build()
+
+        with self.assertRaises(ValueError):
+            StorageLocationBuilder().from_uri(uri="gs:///path/to/docs.pdf").build()
