@@ -78,6 +78,24 @@ class StorageLocationBuilder(BaseModel):
         self.blob_name = blob_name
         return self
 
+    def from_uri(self, uri: str) -> StorageLocationBuilder:
+        prefix = uri.split("//")[0]
+        if prefix != "gs:":
+            raise ValueError("Accepted prefix is 'gs://'")
+
+        bucket_and_blob = uri.split("//")[1]
+
+        bucket = bucket_and_blob.split("/")[0]
+        if len(bucket) == 0:
+            raise ValueError("Bucket must have at least one character")
+        self.bucket = bucket
+
+        if len(bucket_and_blob.split("/")[1]) > 0:
+            blob = "/".join(bucket_and_blob.split("/")[1:])
+            self.blob_name = blob
+
+        return self
+
     def build(self) -> StorageLocation:
         # Getting filename from blob_name
         if self.blob_name is not None:
