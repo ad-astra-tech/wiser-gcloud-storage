@@ -48,6 +48,11 @@ class Storage:
                 bucket_name=location.bucket, source_blob_name=location.blob_name
             )
             return data
+        elif location.filename.endswith(FileExtension.CSV):
+            data = StorageConnector.download_as_string(
+                bucket_name=location.bucket, source_blob_name=location.blob_name
+            )
+            return data
         elif location.filename.endswith(FileExtension.PDF):
             data = StorageConnector.download_as_bytes(
                 bucket_name=location.bucket, source_blob_name=location.blob_name
@@ -84,6 +89,13 @@ class Storage:
             tmp_file.close()
 
         elif location.filename.endswith(FileExtension.TEXT):
+            data = obj
+            StorageConnector.upload_from_string(
+                data=data,
+                bucket_name=location.bucket,
+                destination_blob_name=location.blob_name,
+            )
+        elif location.filename.endswith(FileExtension.CSV):
             data = obj
             StorageConnector.upload_from_string(
                 data=data,
