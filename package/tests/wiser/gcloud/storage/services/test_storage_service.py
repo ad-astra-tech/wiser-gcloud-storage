@@ -67,6 +67,28 @@ class StorageServiceTest(unittest.TestCase):
 
         self.assertEqual(Storage.get(location=location), data)
 
+    @patch("wiser.gcloud.storage.connectors.StorageConnector.download_as_string")
+    def test_get_csv(self, storage_connector_mock):
+        """
+        GIVEN   a valid location
+        WHEN    the blob refers to a csv file
+        THEN    the expected csv is returned
+        """
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
+
+        location = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/data.csv")
+            .build()
+        )
+
+        data = "a,b,c,d\n1,2,3,4"
+        storage_connector_mock.return_value = data
+
+        self.assertEqual(Storage.get(location=location), data)
+
     @patch(
         "wiser.gcloud.storage.connectors.storage_connector.StorageConnector.download_to_filename"
     )
@@ -292,6 +314,28 @@ class StorageServiceTest(unittest.TestCase):
             .build()
         )
         data = {"key_1": "value_1", "key_2": "value_2"}
+        storage_mock.return_value = None
+        self.assertEqual(Storage.save(obj=data, location=location), None)
+
+    @patch(
+        "wiser.gcloud.storage.connectors.storage_connector.StorageConnector.upload_from_string"
+    )
+    def test_save_csv_returns_none(self, storage_mock):
+        """
+        GIVEN   a valid location pointing to a csv file
+        WHEN    Storage.save() is invoked
+        THEN    None is returned
+        """
+        from wiser.gcloud.storage.services import Storage
+        from wiser.gcloud.storage.types.location import StorageLocationBuilder
+
+        location = (
+            StorageLocationBuilder()
+            .set_bucket(bucket=BUCKET)
+            .set_blob_name(blob_name="path/to/data.csv")
+            .build()
+        )
+        data = "a,b,d,c\n1,2,3,4"
         storage_mock.return_value = None
         self.assertEqual(Storage.save(obj=data, location=location), None)
 
