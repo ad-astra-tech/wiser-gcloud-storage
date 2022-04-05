@@ -41,6 +41,15 @@ location = (
 )
 text = Storage.get(location=location)
 
+# CSV #################################################################################################################
+location = (
+    StorageLocationBuilder()
+        .set_bucket(bucket="BUCKET_NAME")
+        .set_blob_name(blob_name="path/to/sentence.csv")
+        .build()
+)
+csv = Storage.get(location=location)
+
 # Numpy ################################################################################################################
 location = (
     StorageLocationBuilder()

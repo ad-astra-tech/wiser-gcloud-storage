@@ -22,7 +22,7 @@ To install Google Cloud Firestore Wiser APIs run command `pip install 'wiser[gcl
 ### Usage
 _Wiser_ comes with several examples: you can find them in the [examples folder](https://github.com/nicolamassarenti/wiser/tree/main/package/examples/). A brief examples of the services currently supported is shown in the following.
 
-GCP Storage supported types are: `.txt`, `.json`, `.npy`, `.jpg`, `.png` and `.pdf`. Below is shown some examples of the `get()` and `save()` APIs.
+GCP Storage supported types are: `.txt`, `.csv`, `.json`, `.npy`, `.jpg`, `.png` and `.pdf`. Below is shown some examples of the `get()` and `save()` APIs.
 
 ```python
 import io
